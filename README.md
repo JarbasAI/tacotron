@@ -1,16 +1,14 @@
 # Tacotron
 
-An implementation of Tacotron speech synthesis in TensorFlow.
-
+An implementation of Tacotron speech synthesis in Tensorflow.
+Modification to python2 implementation of author keithito, [github](https://github.com/keithito/tacotron).
 
 ### Audio Samples
 
-  * **[Audio Samples](https://keithito.github.io/audio-samples/)** from models trained using this repo.
-    * The first set was trained for 877K steps on the [LJ Speech Dataset](https://keithito.com/LJ-Speech-Dataset/)
-      * Speech started to become intelligble around 20K steps.
-      * Although loss continued to decrease, there wasn't much noticable improvement after ~250K steps.
-    * The second set was trained by [@MXGray](https://github.com/MXGray) for 140K steps on the [Nancy Corpus](http://www.cstr.ed.ac.uk/projects/blizzard/2011/lessac_blizzard2011/).
-
+  * **[Audio Samples](https://keithito.github.io/audio-samples/)** after training for 877k steps (~11 days).
+    * Speech started to become intelligble around 20k steps.
+    * There hasn't been much improvement since around 200k steps -- loss has gone down, but it's hard to notice
+      listening to the audio.
 
 
 ## Background
@@ -28,28 +26,22 @@ Pull requests are welcome!
 ## Quick Start
 
 ### Installing dependencies
-
-1. Install Python 3.
-
-2. Install [TensorFlow 1.3](https://www.tensorflow.org/install/). Install with GPU support if it's
-   available for your platform.
-
-3. Install requirements:
-   ```
-   pip install -r requirements.txt
-   ```
+Make sure you have Python 3. Then:
+```
+pip install -r requirements.txt
+```
 
 
 ### Using a pre-trained model
 
 1. **Download and unpack a model**:
    ```
-   curl http://data.keithito.com/data/speech/tacotron-20170720.tar.bz2 | tar xjC /tmp
+   curl http://data.keithito.com/data/speech/tacotron-20170720.tar.bz2 | tar x -C /tmp
    ```
 
 2. **Run the demo server**:
    ```
-   python3 demo_server.py --checkpoint /tmp/tacotron-20170720/model.ckpt
+   python demo_server.py --checkpoint /tmp/tacotron-20170720/model.ckpt
    ```
 
 3. **Point your browser at localhost:9000**
@@ -96,19 +88,14 @@ Pull requests are welcome!
 
 3. **Preprocess the data**
    ```
-   python3 preprocess.py --dataset ljspeech
+   python preprocess.py --dataset ljspeech
    ```
      * Use `--dataset blizzard` for Blizzard data
 
 4. **Train a model**
    ```
-   python3 train.py
+   python train.py
    ```
-
-   Tunable hyperparameters are found in [hparams.py](hparams.py). You can adjust these at the command
-   line using the `--hparams` flag, for example `--hparams="batch_size=16,outputs_per_step=2"`.
-   Hyperparameters should generally be set to the same values at both training and eval time.
-
 
 5. **Monitor with Tensorboard** (optional)
    ```
@@ -120,15 +107,14 @@ Pull requests are welcome!
 
 6. **Synthesize from a checkpoint**
    ```
-   python3 demo_server.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
+   python demo_server.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
    ```
    Replace "185000" with the checkpoint number that you want to use, then open a browser
    to `localhost:9000` and type what you want to speak. Alternately, you can
    run [eval.py](eval.py) at the command line:
    ```
-   python3 eval.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
+   python eval.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
    ```
-   If you set the `--hparams` flag when training, set the same value here.
 
 
 ## Miscellaneous Notes
