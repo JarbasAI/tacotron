@@ -14,6 +14,7 @@ from models import create_model
 from text import sequence_to_text
 from util import audio, infolog, plot, ValueWindow
 log = infolog.log
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 def get_git_commit():
