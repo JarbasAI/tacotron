@@ -13,12 +13,11 @@ texts = ["bitcoin is the future",
          "i love artificial intelligence",
          "my name is Jarbas and i am an open source artificial intelligenc"]
 
+base_out = dirname(__file__) + "/output_samples/"
 for text in texts:
     start = time.time()
-    out = dirname(__file__) + "/output_samples/" + text.replace(" ",
-                                                                "_") + ".wav"
+    out = base_out + text.replace(" ", "_") + ".wav"
     synthesizer.synthesize(text, out)
-
     print "input", text
     print "output_path", out
     print "elapsed time", time.time() - start
