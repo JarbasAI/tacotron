@@ -1,15 +1,10 @@
 # Tacotron
 
 An implementation of Tacotron speech synthesis in Tensorflow.
-Modification to python2 implementation of author keithito, [github](https://github.com/keithito/tacotron).
 
-### Audio Samples
+## WIP
 
-  * **[Audio Samples](https://keithito.github.io/audio-samples/)** after training for 877k steps (~11 days).
-    * Speech started to become intelligble around 20k steps.
-    * There hasn't been much improvement since around 200k steps -- loss has gone down, but it's hard to notice
-      listening to the audio.
-
+Mycroft-core TTS engine
 
 ## Background
 
@@ -26,27 +21,18 @@ Pull requests are welcome!
 ## Quick Start
 
 ### Installing dependencies
+
 ```
+./requirements.sh
 pip install -r requirements.txt
 ```
 
 
 ### Using a pre-trained model
 
-1. **Download and unpack a model**:
-   ```
-   curl http://data.keithito.com/data/speech/tacotron-20170720.tar.bz2 | tar x -C /tmp
-   ```
-
-2. **Run the demo server**:
-   ```
-   python demo_server.py --checkpoint /tmp/tacotron-20170720/model.ckpt
-   ```
-
-3. **Point your browser at localhost:9000**
-   * Type what you want to synthesize
-
-
+```
+run test.py
+```
 
 ### Training
 
@@ -105,11 +91,8 @@ pip install -r requirements.txt
    `~/tacotron/logs-tacotron`.
 
 6. **Synthesize from a checkpoint**
-   ```
-   python demo_server.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
-   ```
-   Replace "185000" with the checkpoint number that you want to use, then open a browser
-   to `localhost:9000` and type what you want to speak. Alternately, you can
+
+   Replace "185000" with the checkpoint number that you want to use
    run [eval.py](eval.py) at the command line:
    ```
    python eval.py --checkpoint ~/tacotron/logs-tacotron/model.ckpt-185000
