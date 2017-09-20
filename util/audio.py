@@ -23,7 +23,7 @@ def spectrogram(y):
 
 def inv_spectrogram(spectrogram):
   S = _db_to_amp(_denormalize(spectrogram) + hparams.ref_level_db)  # Convert back to linear
-  return _inv_preemphasis(_griffin_lim(S ** 1.5))                   # Reconstruct phase
+  return _inv_preemphasis(_griffin_lim(S ** 1.5))  # Reconstruct phase
 
 
 def melspectrogram(y):
@@ -33,8 +33,9 @@ def melspectrogram(y):
 
 
 def inv_melspectrogram(melspectrogram):
-  S = _mel_to_linear(_db_to_amp(_denormalize(melspectrogram)))   # Convert back to linear
-  return _inv_preemphasis(_griffin_lim(S ** 1.5))                # Reconstruct phase
+  S = _mel_to_linear(
+    _db_to_amp(_denormalize(melspectrogram)))  # Convert back to linear
+  return _inv_preemphasis(_griffin_lim(S ** 1.5))  # Reconstruct phase
 
 
 # Based on https://github.com/librosa/librosa/issues/434
@@ -88,8 +89,10 @@ def _amp_to_db(x):
 def _db_to_amp(x):
   return np.power(10.0, x * 0.05)
 
+
 def _preemphasis(x):
   return signal.lfilter([1, -hparams.preemphasis], [1], x)
+
 
 def _inv_preemphasis(x):
   return signal.lfilter([1], [1, -hparams.preemphasis], x)

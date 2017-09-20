@@ -1,15 +1,24 @@
 from synthesizer import Synthesizer
 from os.path import dirname
 import time
+
 model = "tacotron-20170720"
 path = dirname(__file__) + "/trained/" + model + "/model.ckpt"
-text = "support me on patreon"
+
 synthesizer = Synthesizer()
 synthesizer.load(path)
-time.sleep(5)
-start = time.time()
-synthesizer.synthesize(text, dirname(__file__) + "/" + text + ".wav")
 
-print "input", text
-print "path", path
-print "elapsed time", time.time() - start
+texts = ["bitcoin is the future",
+         "long live the blockchain",
+         "i love artificial intelligence",
+         "my name is Jarbas and i am an open source artificial intelligenc"]
+
+for text in texts:
+    start = time.time()
+    out = dirname(__file__) + "/output_samples/" + text.replace(" ",
+                                                                "_") + ".wav"
+    synthesizer.synthesize(text, out)
+
+    print "input", text
+    print "output_path", out
+    print "elapsed time", time.time() - start
