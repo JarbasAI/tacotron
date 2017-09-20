@@ -3,8 +3,7 @@ import numpy as np
 import tensorflow as tf
 from hparams import hparams
 from models import create_model
-from text import text_to_sequence
-from util import audio
+from util import audio, textinput
 
 
 class Synthesizer:
@@ -15,7 +14,6 @@ class Synthesizer:
     with tf.variable_scope('model') as scope:
       self.model = create_model(model_name, hparams)
       self.model.initialize(inputs, input_lengths)
-      self.wav_output = audio.inv_spectrogram_tensorflow(self.model.linear_outputs[0])
 
     print('Loading checkpoint: %s' % checkpoint_path)
     self.session = tf.Session()
@@ -24,14 +22,20 @@ class Synthesizer:
     saver.restore(self.session, checkpoint_path)
 
 
-  def synthesize(self, text):
-    cleaner_names = [x.strip() for x in hparams.cleaners.split(',')]
-    seq = text_to_sequence(text, cleaner_names)
+  def synthesize(self, text, save_path=None):
+    seq = textinput.to_sequence(text,
+      force_lowercase=hparams.force_lowercase,
+      expand_abbreviations=hparams.expand_abbreviations)
     feed_dict = {
       self.model.inputs: [np.asarray(seq, dtype=np.int32)],
       self.model.input_lengths: np.asarray([len(seq)], dtype=np.int32)
     }
-    wav = self.session.run(self.wav_output, feed_dict=feed_dict)
-    out = io.BytesIO()
-    audio.save_wav(audio.inv_preemphasis(wav), out)
-    return out.getvalue()
+    spec = self.session.run(self.model.linear_outputs[0], feed_dict=feed_dict)
+    if save_path is not None:
+      out = save_path
+      audio.save_wav(audio.inv_spectrogram(spec.T), out)
+      return out
+    else:
+      out = io.BytesIO()
+      audio.save_wav(audio.inv_spectrogram(spec.T), out)
+      return out.getvalue()
